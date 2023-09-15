@@ -31,30 +31,30 @@ System::Void lab7::MyForm::Calculate_Click(System::Object^ sender, System::Event
 		double start = System::Convert::ToDouble(this->StartTextBox->Text);
 		double end = System::Convert::ToDouble(this->EndTextBox->Text);
 		double step = System::Convert::ToDouble(this->StepTextBox->Text);
-
-		if (step <= 0) {
-			throw exception("The step must be greater than zero");
-		}
-		if (start >= end) {
-			throw exception("The end of the interval must be greater than the beginning");
-		}
 		this->outputTextBox->Clear();
 
-		while (start <= end) {
-			String^ result = "";
-			Function function(start);
-			
-			try {
-				double variable = function.calculateY();
-				result += "y(" + start + ") = " + variable + "\n";
-			}
-			catch(const exception& ex){
-				MessageBox::Show(gcnew System::String(ex.what()), "Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
-			}
-			
-			this->outputTextBox->AppendText(System::Convert::ToString(result) + Environment::NewLine);
+		if (start >= end) {
+			MessageBox::Show("The end of the interval must be greater than the beginning!", "Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
+		}
+		if (step <= 0) {
+			MessageBox::Show("The step must be greater than zero!", "Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
+		}
+		else {
+			while (start <= end) {
+				String^ result = "";
+				Function function(start);
 
-			start += step;
+				try {
+					double variable = function.calculateY();
+					result += "y(" + start + ") = " + variable + "\n";
+				}
+				catch (const exception& ex) {
+					MessageBox::Show(gcnew System::String(ex.what()), "Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
+				}
+
+				this->outputTextBox->AppendText(System::Convert::ToString(result) + Environment::NewLine);
+				start += step;
+			}
 		}
 	}
 	catch (const exception &ex) {
